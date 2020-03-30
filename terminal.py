@@ -186,6 +186,9 @@ def test():
 
         # All the JSON responses are received.
         rawResult = [jsonArcher[0].json(), jsonIntel[0].json(), jsonTsan[0].json(), jsonRomp[0].json()]
+        for i in range(len(rawResult)):
+            if len(rawResult[i]) == 0:
+                rawResult[i] = None
 
         '''
         # Return combined results
