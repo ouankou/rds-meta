@@ -168,6 +168,7 @@ def test():
         threadTsan = threading.Thread(target=callTsan, args=(name, jsonTsan))
         threadRomp = threading.Thread(target=callRomp, args=(name, jsonRomp))
         
+        microserviceStartTime = time.time()
         # Send all requests withblocking
         threadArcher.start()
         threadInspector.start()
@@ -181,7 +182,6 @@ def test():
         threadRomp.join()
 
         # All the JSON responses are received.
-        anaysisStartTime = time.time()
         rawResult = [jsonArcher[0].json(), jsonIntel[0].json(), jsonTsan[0].json(), jsonRomp[0].json()]
 
         '''
@@ -195,17 +195,25 @@ def test():
 
         # Send the JSON dict objects from microservices to the voting function
         votingResult = {}
+
+        majorityVoteStartTime = time.time()
         majorityVoteResult = majorityVote(rawResult)
         votingResult['Majority Vote'] = majorityVoteResult
+
+        weightVoteStartTime = time.time()
         weightVoteResult = weightVote(rawResult)
         votingResult['Weight Vote'] = weightVoteResult
+
+        randomVoteStartTime = time.time()
         randomVoteResult = randomVote(rawResult)
         votingResult['Random Vote'] = randomVoteResult
+
+        votingEndTime = time.time()
         jsonResult = json.dumps(votingResult)
 
 
         totalEndTime = time.time()
-        timeRecord.write(name + ',' + str(totalStartTime) + ',' + str(analysisStartTime) + ',' + str(totalEndTime) + '\n')
+        timeRecord.write(name + ',' + str(totalStartTime) + ',' + str(microserviceStartTime) + ',' + str(majorityVoteStartTime) + ',' + str(weightVoteStartTime) + ',' + str(randomVoteStartTime) + ',' + str(votingEndTime) + ',' + str(totalEndTime) + '\n')
         timeRecord.close()
         if request.args.get('type') == 'json':
             return flask.make_response(jsonResult, 200)
