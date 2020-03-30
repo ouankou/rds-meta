@@ -137,6 +137,9 @@ def uploader():
 @app.route('/test', methods=['GET', 'POST'])
 def test():
     timeRecord = open('metaservice_time.csv', 'a')
+    majorityVoteRecord = open('majority_vote.log', 'a')
+    weightVoteRecord = open('weight_vote.log', 'a')
+    randomVoteRecord = open('random_vote.log', 'a')
     totalStartTime = time.time()
     try:
         os.makedirs(UPLOAD_FOLDER)
@@ -197,24 +200,44 @@ def test():
         votingResult = {}
 
         majorityVoteStartTime = time.time()
-        majorityVoteResult = majorityVote(rawResult)
+        majorityVoteResult = MetaService.majorityVote(rawResult)
         votingResult['Majority Vote'] = majorityVoteResult
 
         weightVoteStartTime = time.time()
-        weightVoteResult = weightVote(rawResult)
+        weightVoteResult = MetaService.weightVote(rawResult)
         votingResult['Weight Vote'] = weightVoteResult
 
         randomVoteStartTime = time.time()
-        randomVoteResult = randomVote(rawResult)
+        randomVoteResult = MetaService.randomVote(rawResult)
         votingResult['Random Vote'] = randomVoteResult
 
         votingEndTime = time.time()
-        jsonResult = json.dumps(votingResult)
+        jsonResult = json.dumps(votingResult, indent=4)
 
 
         totalEndTime = time.time()
+        # Write the time record
         timeRecord.write(name + ',' + str(totalStartTime) + ',' + str(microserviceStartTime) + ',' + str(majorityVoteStartTime) + ',' + str(weightVoteStartTime) + ',' + str(randomVoteStartTime) + ',' + str(votingEndTime) + ',' + str(totalEndTime) + '\n')
         timeRecord.close()
+
+        # Write the majority vote record
+        voteRecord = {name: majorityVoteResult}
+        majorityVoteRecord.write(json.dumps(voteRecord))
+        majorityVoteRecord.write('\n')
+        majorityVoteRecord.close()
+
+        # Write the weight vote record
+        voteRecord = {name: weightVoteResult}
+        weightVoteRecord.write(json.dumps(voteRecord))
+        weightVoteRecord.write('\n')
+        weightVoteRecord.close()
+
+        # Write the random vote record
+        voteRecord = {name: randomVoteResult}
+        randomVoteRecord.write(json.dumps(voteRecord))
+        randomVoteRecord.write('\n')
+        randomVoteRecord.close()
+
         if request.args.get('type') == 'json':
             return flask.make_response(jsonResult, 200)
         else:
