@@ -12,9 +12,11 @@ RUN groupadd -g 9999 rds && \
 RUN \
     apt-get update && \
     apt-get install -y \
+        git \
         python3-flask \
         python3-requests \
-        vim && \
+        vim \
+        wget && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/*
 

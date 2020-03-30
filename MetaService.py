@@ -6,6 +6,7 @@ import random
 def majorityVote(obj):
 	VoteNum = 0
 	jsAry = []
+	finalAry = []
 	for i in range(len(obj)):
 		if obj[i] != None :
 			js = {}
@@ -29,11 +30,24 @@ def majorityVote(obj):
 		for item in jsAry:
 			for key in item.keys():
 				if item[key] != 'no race':
-					print(item[key])
+					js = {}
+					js['race'] = "true"
+					js['method'] = "Majority Vote"
+					js['race information'] = item[key]
+					finalAry.append(js)
 	else:
 		print("No data race find")
+	js = {}
+	for i in range(len(finalAry)):
+		js[i] = finalAry[i]
 
-def WeightVote(obj):
+	#r = json.dumps(js)
+	r = js
+	return(r)
+
+def weightVote(obj):
+
+	finalAry = []
 
 	Tsanweight = 0.25
 
@@ -91,11 +105,23 @@ def WeightVote(obj):
 		for item in jsAry:
 			for key in item.keys():
 				if item[key] != 'no race':
-					print(item[key])
+					js = {}
+					js['race'] = "true"
+					js['method'] = "Weight Vote"
+					js['race information'] = item[key]
+					finalAry.append(js)
 	else:
 		print("No data race find")
+	js = {}
+	for i in range(len(finalAry)):
+		js[i] = finalAry[i]
 
-def RandomVote(obj):
+	#r = json.dumps(js)
+	r = js
+	return(r)
+
+def randomVote(obj):
+	finalAry = []
 	VoteNum = 0
 	jsAry = []
 	for i in range(len(obj)):
@@ -118,447 +144,18 @@ def RandomVote(obj):
 	for key in jsAry[RandomFlag].keys():
 		if jsAry[RandomFlag][key] != 'no race':
 			print("RDS detected a data race by random vote!")
-			print(jsAry[RandomFlag][key])
+			js = {}
+			js['race'] = "true"
+			js['method'] = "Random Vote"
+			js['race information'] = jsAry[RandomFlag][key]
+			finalAry.append(js)
 		else:
 			print("No data race find")
+		js = {}
+	for i in range(len(finalAry)):
+		js[i] = finalAry[i]
 
-
-jsonTsan = """{
-     "0": {
-        "0": {
-            "Memory Address": "0x7ffe4e2902a0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "1": {
-        "0": {
-            "Memory Address": "0x7fff6ec173e0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "2": {
-        "0": {
-            "Memory Address": "0x7fff41bea120",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "3": {
-        "0": {
-            "Memory Address": "0x7ffda22f4350",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "4": {
-        "0": {
-            "Memory Address": "0x7ffe205522e0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "5": {
-        "0": {
-            "Memory Address": "0x7ffcaf621ff0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "6": {
-        "0": {
-            "Memory Address": "0x7fff15784da0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "7": {
-        "0": {
-            "Memory Address": "0x7ffd39b98ef0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "8": {
-        "0": {
-            "Memory Address": "0x7ffeae028eb0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "9": {
-        "0": {
-            "Memory Address": "0x7fff0e372500",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "10": {
-        "0": {
-            "Memory Address": "0x7ffc245fa330",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "11": {
-        "0": {
-            "Memory Address": "0x7ffe034dc190",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "12": {
-        "0": {
-            "Memory Address": "0x7ffd89e969f0",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "13": {
-        "0": {
-            "Memory Address": "0x7ffd1efa9170",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    },
-    "14": {
-        "0": {
-            "Memory Address": "0x7fff65bfff10",
-            "Write_thread": "thread T1",
-            "file loaction": "/home/rds/dataracebench/micro-benchmarks",
-            "write file name": "DRB116-target-teams-orig-yes.c",
-            "write line #": "66",
-            "write column #": -1,
-            "Write_thread1": "main thread",
-            "write file name1": "DRB116-target-teams-orig-yes.c",
-            "write line #1": "66",
-            "write column #1": -1,
-            "tool": "ThreadSanitier"
-        },
-        "1": {
-            "Memory Address": "0x7b2000004000",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        },
-        "2": {
-            "Memory Address": "0x7b1c000038e0",
-            "Write_thread": "main thread",
-            "Write_thread1": "thread T1"
-        }
-    }
-     }"""
-
-jsonArcher = """{
-     "0": {
-        
-    },
-    "1": {
-        
-    },
-    "2": {
-        
-    },
-    "3": {
-       
-    },
-    "4": {
-        
-    },
-    "5": {
-        
-    },
-    "6": {
-        
-    },
-    "7": {
-        
-    },
-    "8": {
-       
-    },
-    "9": {
-        
-    },
-    "10": {
-        
-    },
-    "11": {
-        
-    },
-    "12": {
-
-    },
-    "13": {
-
-    },
-    "14": {
-    }
-    }"""
-
-data = json.loads(jsonTsan)
-
-data2 = json.loads(jsonArcher)
-
-data3 = json.loads(jsonTsan)
-
-obj = [data, None, data2, data3]
-
-majorityVote(obj)
-
-WeightVote(obj)
-
-RandomVote(obj)
+	#r = json.dumps(js)
+	r = js
+	return(r)
 

@@ -1,3 +1,4 @@
+import flask
 from flask import Flask, request, render_template, jsonify
 from subprocess import PIPE, run
 import requests
@@ -135,6 +136,8 @@ def uploader():
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+    timeRecord = open('metaservice_time.csv', 'a')
+    totalStartTime = time.time()
     try:
         os.makedirs(UPLOAD_FOLDER)
     except FileExistsError:
@@ -177,38 +180,38 @@ def test():
         threadTsan.join()
         threadRomp.join()
 
-        rawResult = [jsonArcher, jsonIntel, jsonTsan, jsonRomp]
-
-        # Return combined results
-        for i in range(4):
-            data = json.loads(rawResult)
-            result[str(i)] = data
-        jsonResult = json.dumps(result, indent=4)
-        return flask.make_response(jsonResult, 200)
+        # All the JSON responses are received.
+        anaysisStartTime = time.time()
+        rawResult = [jsonArcher[0].json(), jsonIntel[0].json(), jsonTsan[0].json(), jsonRomp[0].json()]
 
         '''
-        # Send the JSON responses from microservices to the voting function
-        # Expect a JSON object back
-        result = vote(rawResult)
+        # Return combined results
+        result = {}
+        for i in range(4):
+            result[str(i)] = rawResult[i]
+        jsonResult = json.dumps(result, indent=4)
+        return flask.make_response(jsonResult, 200)
+        '''
 
-        cmd_list = [
-            "/home/rds/rds-archer/check.sh"
-         ]
-        for cmd in cmd_list:
-            result = run(cmd.split(), universal_newlines=True)
+        # Send the JSON dict objects from microservices to the voting function
+        votingResult = {}
+        majorityVoteResult = majorityVote(rawResult)
+        votingResult['Majority Vote'] = majorityVoteResult
+        weightVoteResult = weightVote(rawResult)
+        votingResult['Weight Vote'] = weightVoteResult
+        randomVoteResult = randomVote(rawResult)
+        votingResult['Random Vote'] = randomVoteResult
+        jsonResult = json.dumps(votingResult)
 
-        # The output log may not exist because the tool doesn't support the input.
-        # In this case, an empty JSON response will be returned.
-        logFile = "/home/rds/dataracebench/results/log/" + name + ".archer.parser.log"
-        if os.path.exists(logFile):
-            jsonResult = logjson.jsonify(logFile)
-        else:
-            jsonResult = flask.jsonify({})
+
+        totalEndTime = time.time()
+        timeRecord.write(name + ',' + str(totalStartTime) + ',' + str(analysisStartTime) + ',' + str(totalEndTime) + '\n')
+        timeRecord.close()
         if request.args.get('type') == 'json':
             return flask.make_response(jsonResult, 200)
         else:
             return render_template('index.html', val=output.split('\n'))
-        '''
+
 
 def callArcher(name, result):
     url = 'http://10.18.206.135:5011/upload?type=json'
